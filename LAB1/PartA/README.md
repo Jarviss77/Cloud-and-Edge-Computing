@@ -10,7 +10,7 @@ sudo snap install microstack --devmode --beta
 ## 2. Create a ssh key pair
 - Create a ssh key pair
 ```bash
-ssh-keygen -t rsa -b 4096 -C "
+ssh-keygen -t rsa -b 4096 -N "" -f ~/.ssh/id_rsa
 ```
 - Add the public key to the instance
 ```bash
@@ -24,14 +24,15 @@ wget https://cloud-images.ubuntu.com/jammy/current/jammy-server-cloudimg-amd64.i
 ```
 - Add the Image to microstack
 ```bash
-microstack.openstack server create --flavor m1.small \
-  --image ubuntu-22.04 --network test --security-group default \
-  --key-name <key-name> <name of the instance>
+microstack.openstack image create --file ubuntu-22.04.img \
+  --disk-format qcow2 --container-format bare --public \
+  --property hw_disk_bus=scsi --property hw_scsi_model=virtio-scsi ubuntu-22.04
 ```
 - Create An Instance (Assign atleast m1.small flavor for ubuntu instances)
 ```bash
 microstack.openstack server create --flavor m1.small \
-  --image ubuntu-22.04 --network test --security-group default <name of the instance>
+  --image ubuntu-22.04 --network test --security-group default \
+  --key-name <key-name> <name of the instance>
 ```
 
 
